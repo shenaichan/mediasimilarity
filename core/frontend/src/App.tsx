@@ -7,7 +7,7 @@ function App() {
   return (
     <div id="maincontent">
       <h1>this is a react app!</h1>
-      <button onClick={() => setCount((count) => count + 2)}>
+      <button onClick={() => setCount((count) => count + 5)}>
         count is {count}
       </button>
     </div>
