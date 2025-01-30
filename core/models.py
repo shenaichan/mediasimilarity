@@ -15,6 +15,6 @@ class Trope(models.Model):
 class Media(models.Model):
     urlSafeTitle = models.TextField(unique=True)
     urlMediaType = models.TextField()
-    displayTitle = models.TextField(blank=True, null=True)
+    displayTitle = models.TextField(blank=True, null=True, db_index=True)
 
-    tropes = models.ManyToManyField(Trope)
+    tropes = models.ManyToManyField(Trope, related_name="medias")
