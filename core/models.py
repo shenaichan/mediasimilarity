@@ -9,7 +9,7 @@ class User(AbstractUser):
 
 class Trope(models.Model):
     urlSafeName = models.TextField(unique=True)
-    displayName = models.TextField(blank=True, null=True)
+    displayName = models.TextField(unique=True)
 
 
 class Media(models.Model):
