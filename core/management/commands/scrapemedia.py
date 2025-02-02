@@ -4,10 +4,18 @@ import requests
 from core.models import Trope, Media, mediaCategories
 import time
 import re
+from enum import Enum
+
+
 
 class Command(BaseCommand):
 
     def handle(self, *args, **options):     
+
+        class LinkType(Enum):
+            MEDIA = 0
+            SUBPAGE = 1
+            NEITHER = 2
 
         tropePageBaseUrl = "https://tvtropes.org/pmwiki/pmwiki.php/Main/"
 
@@ -16,7 +24,7 @@ class Command(BaseCommand):
             # matches any of the designated "media namespace" urls
             return any(category == namespace for category, _ in mediaCategories)
         
-        def decompose(href: str):
+        def decode(href: str, tropeName: str):
             # returns the media type and name if the url is to a piece of media
             # otherwise just returns empty strings
             pattern = r"/pmwiki/pmwiki.php/([^/]+)/([^/]+)"
@@ -24,8 +32,11 @@ class Command(BaseCommand):
             if match:
                 namespace, mediaName = match.groups()
                 if isMedia(namespace):
-                    return namespace, mediaName
-            return "", ""
+                    return LinkType.MEDIA, namespace, mediaName
+                if namespace == tropeName:
+                    return LinkType.SUBPAGE, namespace, mediaName
+                
+            return LinkType.NEITHER, "", ""
 
         def grab(pageName: str):
             url = tropePageBaseUrl + pageName
@@ -35,8 +46,12 @@ class Command(BaseCommand):
                 # goes into the "main-article" body and gets everything with the href attribute 
                 # i.e. everything with a link
                 for link in soup.find(id="main-article").find_all(href=True):
-                    mediaType, mediaName = decompose(link["href"])
+                    linkType, mediaType, mediaName = decode(link["href"])
                     displayName = link.string
+                    if linkType == LinkType.MEDIA:
+                        pass
+                    elif linkType == LinkType.SUBPAGE:
+                        pass
                     if mediaType and mediaName and displayName:
                         print(mediaType, mediaName, displayName)
                         # Media.objects.create(urlSafeTitle=mediaName, 
@@ -64,7 +79,7 @@ class Command(BaseCommand):
             # and for media links (this is our "node content")
             # so maybe we just want a function that's like grab but it returns like
             # two lists: a list of subpages (children), and a list of media pages (content)
-            
+
             
             return
 
