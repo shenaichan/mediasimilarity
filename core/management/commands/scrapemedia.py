@@ -38,31 +38,51 @@ class Command(BaseCommand):
                 
             return LinkType.NEITHER, "", ""
 
+        def stop(soup: BeautifulSoup):
+            header = soup.find(itemprop="headline")
+            if link := header.find(href=True):
+                linkType, _, _ = decode(link["href"], "")
+                if linkType == LinkType.MEDIA:
+                    return 
+
+            return False
+        
         def grab(pageName: str):
             url = tropePageBaseUrl + pageName
             response = requests.get(url)
             if response.status_code == 200:
+                subpages, media = [], []
                 soup = BeautifulSoup(response.content, "lxml")
                 # goes into the "main-article" body and gets everything with the href attribute 
                 # i.e. everything with a link
                 for link in soup.find(id="main-article").find_all(href=True):
                     linkType, mediaType, mediaName = decode(link["href"])
                     displayName = link.string
-                    if linkType == LinkType.MEDIA:
-                        pass
-                    elif linkType == LinkType.SUBPAGE:
-                        pass
-                    if mediaType and mediaName and displayName:
-                        print(mediaType, mediaName, displayName)
-                        # Media.objects.create(urlSafeTitle=mediaName, 
-                        #                      urlMediaType=mediaType, 
-                        #                      displayTitle=displayName)
-                        
-                return 0
+                    if displayName:
+                        if linkType == LinkType.MEDIA:
+                            media.append((mediaType, mediaName, displayName))
+                        elif linkType == LinkType.SUBPAGE:
+                            subpages.append(mediaName) # make these names more accurate lol
+                return subpages, media
             else:
-                return -1
+                return "some kind of error i'll make it better later"
         
-        def bfs(pageName: str):
+        def insert(trope: Trope, mediaType: str, mediaName: str, displayName: str):
+            # if media url exists already, then get it, otherwise make it
+            mediaEntry, created = Media.objects.get_or_create(urlSafeTitle=mediaName, urlMediaType=mediaType)
+            # if we just made it, add a display title
+            # we didn't query on it initially just in case the html element's string
+            # was different this time -- would rather err on the side of caution
+            # and not accidentally duplicate media entries
+            if created:
+                mediaEntry.displayTitle = displayName
+                mediaEntry.save()
+            mediaEntry.tropes.add(trope) # won't duplicate the trope relationship if it's already there
+            
+            
+
+        def bfs(trope: Trope):
+            
             # should, given a trope's main page
             # search all its subpages and get the media connected to each of those
             # i think it should put the media into the database as it goes
