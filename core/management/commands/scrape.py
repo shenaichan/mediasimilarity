@@ -1,7 +1,6 @@
 from django.core.management.base import BaseCommand
 from bs4 import BeautifulSoup
 import requests
-# import lxml
 from core.models import Trope, Media
 import time
 
@@ -23,7 +22,7 @@ class Command(BaseCommand):
                     link = row.find("a")
                     # print(link.string)
                     # print(link['href'])
-                    displayName = link.string.strip()
+                    displayName = link.string
                     urlSafeName = link['href'].split("/")[-1]
                     Trope.objects.create(urlSafeName=urlSafeName, displayName=displayName)
                 return 0
