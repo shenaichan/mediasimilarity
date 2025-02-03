@@ -17,28 +17,28 @@ class Command(BaseCommand):
             SUBPAGE = 1
             NEITHER = 2
 
-        tropePageBaseUrl = "https://tvtropes.org/pmwiki/pmwiki.php/Main/"
+        base = "https://tvtropes.org/pmwiki/pmwiki.php/"
 
-        def isMedia(namespace: str):
+        def isMedia(namespace: str) -> bool: 
             # returns true if the namespace the page is under
             # matches any of the designated "media namespace" urls
             return any(category == namespace for category, _ in mediaCategories)
         
-        def decode(href: str, tropeName: str):
+        def decode(href: str, tropeName: str) -> tuple[LinkType, str, str]:
             # returns the media type and name if the url is to a piece of media
             # otherwise just returns empty strings
             pattern = r"/pmwiki/pmwiki.php/([^/]+)/([^/]+)"
             match = re.match(pattern, href)
             if match:
-                namespace, mediaName = match.groups()
+                namespace, pageName = match.groups()
                 if isMedia(namespace):
-                    return LinkType.MEDIA, namespace, mediaName
+                    return LinkType.MEDIA, namespace, pageName
                 if namespace == tropeName:
-                    return LinkType.SUBPAGE, namespace, mediaName
+                    return LinkType.SUBPAGE, namespace, pageName
                 
             return LinkType.NEITHER, "", ""
 
-        def stop(soup: BeautifulSoup):
+        def earlyStop(soup: BeautifulSoup):
             header = soup.find(itemprop="headline")
             if link := header.find(href=True):
                 linkType, _, _ = decode(link["href"], "")
@@ -47,8 +47,8 @@ class Command(BaseCommand):
 
             return False
         
-        def grab(pageName: str):
-            url = tropePageBaseUrl + pageName
+        def grab(url: str):
+            # should go into ANY page, so like it should take in a full url actually
             response = requests.get(url)
             if response.status_code == 200:
                 subpages, media = [], []
@@ -56,13 +56,13 @@ class Command(BaseCommand):
                 # goes into the "main-article" body and gets everything with the href attribute 
                 # i.e. everything with a link
                 for link in soup.find(id="main-article").find_all(href=True):
-                    linkType, mediaType, mediaName = decode(link["href"])
+                    linkType, nameSpace, pageName = decode(link["href"])
                     displayName = link.string
                     if displayName:
                         if linkType == LinkType.MEDIA:
-                            media.append((mediaType, mediaName, displayName))
+                            media.append((nameSpace, pageName, displayName))
                         elif linkType == LinkType.SUBPAGE:
-                            subpages.append(mediaName) # make these names more accurate lol
+                            subpages.append(nameSpace + "/" + pageName) # make these names more accurate lol
                 return subpages, media
             else:
                 return "some kind of error i'll make it better later"
@@ -79,9 +79,32 @@ class Command(BaseCommand):
                 mediaEntry.save()
             mediaEntry.tropes.add(trope) # won't duplicate the trope relationship if it's already there
             
+        def insertList(media: list[Media], trope: Trope) -> bool:
+            for m in media:
+                insert(trope, media[0], media[1], media[2]) # make this less ugly...
+
+        
+        def bfs(trope: Trope):
+
+            
+            seen = set()
+            queue = ["Main/" + trope.urlSafeName]
+
+            while queue:
+                curr = queue[0]
+                queue = queue[1:]
+                subpages, media = grab(base + curr)
+                insertList(media, trope)
+                for subpage in subpages:
+                    if subpage not in seen:
+                        queue.append(subpage)
+                        seen.add(subpage)
+                            
+            return
             
 
-        def bfs(trope: Trope):
+
+
             
             # should, given a trope's main page
             # search all its subpages and get the media connected to each of those
