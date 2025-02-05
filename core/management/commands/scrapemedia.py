@@ -47,7 +47,7 @@ class Command(BaseCommand):
 
             return False
         
-        def grab(url: str):
+        def grab(url: str, trope: Trope):
             # should go into ANY page, so like it should take in a full url actually
             response = requests.get(url)
             if response.status_code == 200:
@@ -56,7 +56,7 @@ class Command(BaseCommand):
                 # goes into the "main-article" body and gets everything with the href attribute 
                 # i.e. everything with a link
                 for link in soup.find(id="main-article").find_all(href=True):
-                    linkType, nameSpace, pageName = decode(link["href"])
+                    linkType, nameSpace, pageName = decode(link["href"], trope.urlSafeName)
                     displayName = link.string
                     if displayName:
                         if linkType == LinkType.MEDIA:
@@ -93,7 +93,10 @@ class Command(BaseCommand):
             while queue:
                 curr = queue[0]
                 queue = queue[1:]
-                subpages, media = grab(base + curr)
+                time.sleep(0.5)
+                subpages, media = grab(base + curr, trope)
+                print(base + curr)
+                print(subpages, media)
                 insertList(media, trope)
                 for subpage in subpages:
                     if subpage not in seen:
@@ -123,10 +126,9 @@ class Command(BaseCommand):
             # so maybe we just want a function that's like grab but it returns like
             # two lists: a list of subpages (children), and a list of media pages (content)
 
-            
-            return
-
-        if grab("Narm") < 0:
+        narm = Trope.objects.get(urlSafeName="Narm")
+        
+        if bfs(narm) < 0:
             print(f"Something went wrong on trope")
         else:
             print(f"Grabbed trope")
