@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, NavigableString
 import requests
 from core.models import Trope, Media, mediaCategories
 import time
@@ -41,31 +41,38 @@ class Command(BaseCommand):
         def earlyStop(soup: BeautifulSoup):
             header = soup.find(itemprop="headline")
             if link := header.find(href=True):
-                linkType, _, _ = decode(link["href"], "")
+                linkType, nameSpace, pageName = decode(link["href"], "")
                 if linkType == LinkType.MEDIA:
-                    return 
+                    return nameSpace, pageName, link.string
 
-            return False
+            return "", "", ""
         
         def grab(url: str, trope: Trope):
             # should go into ANY page, so like it should take in a full url actually
+            time.sleep(0.25)
             response = requests.get(url)
+            subpages, media = [], []
             if response.status_code == 200:
-                subpages, media = [], []
                 soup = BeautifulSoup(response.content, "lxml")
-                # goes into the "main-article" body and gets everything with the href attribute 
-                # i.e. everything with a link
-                for link in soup.find(id="main-article").find_all(href=True):
-                    linkType, nameSpace, pageName = decode(link["href"], trope.urlSafeName)
-                    displayName = link.string
-                    if displayName:
-                        if linkType == LinkType.MEDIA:
-                            media.append((nameSpace, pageName, displayName))
-                        elif linkType == LinkType.SUBPAGE:
-                            subpages.append(nameSpace + "/" + pageName) # make these names more accurate lol
-                return subpages, media
+
+                nameSpace, pageName, displayName = earlyStop(soup)
+                if nameSpace and pageName and displayName:
+                    # print("early stop!")
+                    media.append((nameSpace, pageName, displayName))
+                else:
+                    # goes into the "main-article" body and gets everything with the href attribute 
+                    # i.e. everything with a link
+                    for link in soup.find(id="main-article").find_all(href=True):
+                        linkType, nameSpace, pageName = decode(link["href"], trope.urlSafeName)
+                        displayName = link.string
+                        if displayName:
+                            if linkType == LinkType.MEDIA:
+                                media.append((nameSpace, pageName, displayName))
+                            elif linkType == LinkType.SUBPAGE:
+                                subpages.append(nameSpace + "/" + pageName) # make these names more accurate lol
             else:
-                return "some kind of error i'll make it better later"
+                print("OOPS!")
+            return subpages, media
         
         def insert(trope: Trope, mediaType: str, mediaName: str, displayName: str):
             # if media url exists already, then get it, otherwise make it
@@ -77,11 +84,29 @@ class Command(BaseCommand):
             if created:
                 mediaEntry.displayTitle = displayName
                 mediaEntry.save()
+            elif mediaEntry.displayTitle != displayName and not mediaEntry.displayIsDefinitive:
+                # print(f"replacing title... old was {mediaEntry.displayTitle} and new might be {displayName}")
+                url = base + mediaType + "/" + mediaName
+                # print(url)
+                time.sleep(0.25)
+                response = requests.get(url)
+                if response.status_code == 200:
+                    soup = BeautifulSoup(response.content, "lxml")
+                    title = soup.find(itemprop="headline")
+                    for desc in title.descendants:
+                        # print(desc)
+                        if isinstance(desc, NavigableString) and desc.strip():
+                            # print(f"new is {desc}")
+                            mediaEntry.displayTitle = desc.strip()
+                            mediaEntry.displayIsDefinitive = True
+                            mediaEntry.save()
+                            break
+
             mediaEntry.tropes.add(trope) # won't duplicate the trope relationship if it's already there
             
         def insertList(media: list[Media], trope: Trope) -> bool:
             for m in media:
-                insert(trope, media[0], media[1], media[2]) # make this less ugly...
+                insert(trope, m[0], m[1], m[2]) # make this less ugly...
 
         
         def bfs(trope: Trope):
@@ -91,12 +116,14 @@ class Command(BaseCommand):
             queue = ["Main/" + trope.urlSafeName]
 
             while queue:
+                # print(queue)
                 curr = queue[0]
                 queue = queue[1:]
-                time.sleep(0.5)
-                subpages, media = grab(base + curr, trope)
+                
                 print(base + curr)
-                print(subpages, media)
+
+                subpages, media = grab(base + curr, trope)
+                # print(subpages, media)
                 insertList(media, trope)
                 for subpage in subpages:
                     if subpage not in seen:
@@ -126,12 +153,16 @@ class Command(BaseCommand):
             # so maybe we just want a function that's like grab but it returns like
             # two lists: a list of subpages (children), and a list of media pages (content)
 
-        narm = Trope.objects.get(urlSafeName="Narm")
+        # Media.objects.all().delete()
+        # narm = Trope.objects.get(urlSafeName="Narm")
+        # print(narm)
+        # insert(narm, "music", "stuff", "stuff")
+        # music = Media.objects.get(urlSafeTitle="stuff")
+        # print([trope for trope in music.tropes.all()] )
         
-        if bfs(narm) < 0:
-            print(f"Something went wrong on trope")
-        else:
-            print(f"Grabbed trope")
+        for trope in Trope.objects.all():
+            bfs(trope)
+            print(f"Grabbed trope #{trope.id} {trope.displayName}")
 '''
 go to tvtropes
 go through all 61 of these

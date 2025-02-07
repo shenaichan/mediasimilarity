@@ -56,5 +56,8 @@ class Media(models.Model):
     urlSafeTitle = models.TextField()
     urlMediaType = models.TextField()
     displayTitle = models.TextField(blank=True, null=True, db_index=True)
-
+    displayIsDefinitive = models.BooleanField(default=False)
     tropes = models.ManyToManyField(Trope, related_name="medias")
+
+    def __str__(self):
+        return f"{self.displayTitle} at {self.urlMediaType}/{self.urlSafeTitle}"
