@@ -5,7 +5,7 @@ function App() {
   // const [count, setCount] = useState(0);
   const [mediaList, setMediaList] = useState<string[]>([]);
   const [currInput, setCurrInput] = useState("Search for media...");
-  const [inputClicked, setInputClicked] = useState(false);
+  const [inputActivated, setInputActivated] = useState(false);
   const [timeoutId, setTimeoutId] = useState(-1);
 
   function submitOnEnter(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -20,9 +20,9 @@ function App() {
   }
 
   function activate() {
-    if (!inputClicked){
+    if (!inputActivated){
       setCurrInput("");
-      setInputClicked(true);
+      setInputActivated(true);
     }
   }
 
@@ -41,12 +41,14 @@ function App() {
   }
 
   useEffect(() => {
-    clearTimeout(timeoutId);
-    const tid = setTimeout(() => {
-      console.log("finally stopped typing");
-      search(currInput);
-    }, 1000);
-    setTimeoutId(tid);
+    if (inputActivated) {
+      clearTimeout(timeoutId);
+      const tid = setTimeout(() => {
+        console.log("finally stopped typing");
+        search(currInput);
+      }, 1000);
+      setTimeoutId(tid);
+    }
   }, [currInput]);
 
 
@@ -55,7 +57,7 @@ function App() {
       <div id="searchstuff">
         <h1>t(venn)tropes</h1>
         <input
-          style={inputClicked ? {} : {color: "gray", fontStyle: "italic"}}
+          style={inputActivated ? {} : {color: "gray", fontStyle: "italic"}}
           value={currInput}
           onClick={activate}
           onChange={(e) => setCurrInput(e.target.value)}
