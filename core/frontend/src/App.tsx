@@ -41,7 +41,7 @@ function App() {
   }
 
   useEffect(() => {
-    if (inputActivated) {
+    if (inputActivated && currInput.trim()) {
       clearTimeout(timeoutId);
       const tid = setTimeout(() => {
         console.log("finally stopped typing");
