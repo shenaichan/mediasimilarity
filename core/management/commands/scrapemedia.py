@@ -22,12 +22,24 @@ class Command(BaseCommand):
 
         startingTrope = options['startingTrope']  
 
+        lastTime = [time.time() - 100]
+
         class LinkType(Enum):
             MEDIA = 0
             SUBPAGE = 1
             NEITHER = 2
 
         base = "https://tvtropes.org/pmwiki/pmwiki.php/"
+
+        def maybeWait():
+            currTime = time.time()
+            timeElapsed = currTime - lastTime[0]
+            # print(timeElapsed)
+            lastTime[0] = currTime
+            if timeElapsed < 0.35:
+                time.sleep(0.35 - timeElapsed)
+            return
+
 
         def isMedia(namespace: str) -> bool: 
             # returns true if the namespace the page is under
@@ -59,7 +71,8 @@ class Command(BaseCommand):
         
         def grab(url: str, trope: Trope):
             # should go into ANY page, so like it should take in a full url actually
-            # time.sleep(0.15)
+            # time.sleep(0.5)
+            maybeWait()
             response = requests.get(url)
             subpages, media = [], []
             if response.status_code == 200:
@@ -98,7 +111,8 @@ class Command(BaseCommand):
                 # print(f"replacing title... old was {mediaEntry.displayTitle} and new might be {displayName}")
                 url = base + mediaType + "/" + mediaName
                 print(url)
-                # time.sleep(0.15)
+                # time.sleep(0.5)
+                maybeWait()
                 response = requests.get(url)
                 if response.status_code == 200:
                     soup = BeautifulSoup(response.content, "lxml")
@@ -111,6 +125,8 @@ class Command(BaseCommand):
                             mediaEntry.displayIsDefinitive = True
                             mediaEntry.save()
                             break
+                else:
+                    print("OOPS!")
 
             mediaEntry.tropes.add(trope) # won't duplicate the trope relationship if it's already there
             
