@@ -59,7 +59,7 @@ class Command(BaseCommand):
         
         def grab(url: str, trope: Trope):
             # should go into ANY page, so like it should take in a full url actually
-            time.sleep(0.15)
+            # time.sleep(0.15)
             response = requests.get(url)
             subpages, media = [], []
             if response.status_code == 200:
@@ -98,7 +98,7 @@ class Command(BaseCommand):
                 # print(f"replacing title... old was {mediaEntry.displayTitle} and new might be {displayName}")
                 url = base + mediaType + "/" + mediaName
                 print(url)
-                time.sleep(0.15)
+                # time.sleep(0.15)
                 response = requests.get(url)
                 if response.status_code == 200:
                     soup = BeautifulSoup(response.content, "lxml")

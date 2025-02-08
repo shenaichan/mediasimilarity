@@ -1,4 +1,17 @@
 #maincontent {
-  max-width: 42em;
-  margin: 15 auto;
+  max-width: 500px;
+  margin: 0px auto;
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid black;
+}
+
+#searchstuff {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid black;
+  align-items: center;
 }

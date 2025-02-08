@@ -14,5 +14,5 @@ class Command(BaseCommand):
         print(med.displayTitle)
         print(len(med.tropes.all()))
         tropes = [(trope.displayName, trope.medias.count()) for trope in med.tropes.all()]
-        tropes.sort(key=lambda x: x[1])
+        # tropes.sort(key=lambda x: x[1])
         print(tropes)
