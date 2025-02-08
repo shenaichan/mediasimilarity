@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 
 function App() {
@@ -6,6 +6,7 @@ function App() {
   const [mediaList, setMediaList] = useState<string[]>([]);
   const [currInput, setCurrInput] = useState("Search for media...");
   const [inputClicked, setInputClicked] = useState(false);
+  const [timeoutId, setTimeoutId] = useState(-1);
 
   function submitOnEnter(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
@@ -24,6 +25,30 @@ function App() {
       setInputClicked(true);
     }
   }
+
+  async function search(query: string): Promise<any> {
+    const url = `/api/search?q=${query}`;
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+      const json = await response.json();
+      console.log(json);
+    } catch(e) {
+      console.error((e as Error).message);
+    }
+  }
+
+  useEffect(() => {
+    clearTimeout(timeoutId);
+    const tid = setTimeout(() => {
+      console.log("finally stopped typing");
+      search(currInput);
+    }, 1000);
+    setTimeoutId(tid);
+  }, [currInput]);
+
 
   return (
     <div id="maincontent">
