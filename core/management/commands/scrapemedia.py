@@ -5,12 +5,22 @@ from core.models import Trope, Media, mediaCategories
 import time
 import re
 from enum import Enum
+from datetime import datetime
+import pytz
+from termcolor import colored
 
+
+currTz = pytz.timezone('America/Los_Angeles')
 
 
 class Command(BaseCommand):
 
-    def handle(self, *args, **options):     
+    def add_arguments(self, parser):
+        parser.add_argument('startingTrope', type=int)
+
+    def handle(self, *args, **options):   
+
+        startingTrope = options['startingTrope']  
 
         class LinkType(Enum):
             MEDIA = 0
@@ -49,7 +59,7 @@ class Command(BaseCommand):
         
         def grab(url: str, trope: Trope):
             # should go into ANY page, so like it should take in a full url actually
-            time.sleep(0.25)
+            time.sleep(0.15)
             response = requests.get(url)
             subpages, media = [], []
             if response.status_code == 200:
@@ -87,8 +97,8 @@ class Command(BaseCommand):
             elif mediaEntry.displayTitle != displayName and not mediaEntry.displayIsDefinitive:
                 # print(f"replacing title... old was {mediaEntry.displayTitle} and new might be {displayName}")
                 url = base + mediaType + "/" + mediaName
-                # print(url)
-                time.sleep(0.25)
+                print(url)
+                time.sleep(0.15)
                 response = requests.get(url)
                 if response.status_code == 200:
                     soup = BeautifulSoup(response.content, "lxml")
@@ -159,10 +169,14 @@ class Command(BaseCommand):
         # insert(narm, "music", "stuff", "stuff")
         # music = Media.objects.get(urlSafeTitle="stuff")
         # print([trope for trope in music.tropes.all()] )
-        
-        for trope in Trope.objects.all():
+        tropes = Trope.objects.all()[startingTrope - 1:]
+        for trope in tropes:
+            startTime = time.time()
             bfs(trope)
-            print(f"Grabbed trope #{trope.id} {trope.displayName}")
+            endTime = time.time()
+            elapsedTime = endTime - startTime
+            currTime = datetime.now(currTz).strftime('%m-%d %H:%M:%S')
+            print(colored(f"[{currTime}] Grabbed trope #{trope.id} {trope.displayName} in {elapsedTime:.4f} seconds", "red"))
 '''
 go to tvtropes
 go through all 61 of these
