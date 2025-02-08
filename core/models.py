@@ -51,6 +51,8 @@ class Trope(models.Model):
     urlSafeName = models.TextField(unique=True)
     displayName = models.TextField(unique=True)
 
+    def __str__(self):
+        return self.displayName
 
 class Media(models.Model):
     urlSafeTitle = models.TextField()
