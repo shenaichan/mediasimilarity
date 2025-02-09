@@ -13,6 +13,7 @@ function App() {
   const [currInput, setCurrInput] = useState("Search for media...");
   const [inputActivated, setInputActivated] = useState(false);
   const [timeoutId, setTimeoutId] = useState(-1);
+  const [searching, setSearching] = useState(false);
 
   // function submitOnEnter(e: React.KeyboardEvent<HTMLInputElement>) {
   //   if (e.key === "Enter") {
@@ -41,6 +42,7 @@ function App() {
       }
       const json: media[] = await response.json();
       setMediaList(json);
+      setSearching(false);
       console.log(json);
     } catch (e) {
       console.error((e as Error).message);
@@ -48,11 +50,12 @@ function App() {
   }
 
   useEffect(() => {
+    setSearching(true);
     clearTimeout(timeoutId);
     if (inputActivated && currInput.trim()) {
       const tid = setTimeout(() => {
         console.log("finally stopped typing");
-        search(currInput);
+        search(currInput.trim());
       }, 1000);
       setTimeoutId(tid);
     }
@@ -83,17 +86,28 @@ function App() {
         {/* <button onClick={submit}>
           click to submit or you can just press enter
         </button> */}
-        <ul>
-          {mediaList.map((elt) => (
-            <li key={`${elt.urlMediaType}/${elt.urlSafeTitle}`}>
-              <a
-                href={`https://tvtropes.org/pmwiki/pmwiki.php/${elt.urlMediaType}/${elt.urlSafeTitle}`}
-              >
-                {maybeAddType(elt)}
-              </a>
-            </li>
-          ))}
-        </ul>
+        {inputActivated && currInput.trim() ? (
+          mediaList.length === 0 ? (
+            searching ? (
+              <p>Searching...</p>
+            ) : (
+              <p>Sorry, there's no media matching your search.</p>
+            )
+          ) : (
+            <ul>
+              {mediaList.map((elt) => (
+                <li key={`${elt.urlMediaType}/${elt.urlSafeTitle}`}>
+                  <a
+                    href={`https://tvtropes.org/pmwiki/pmwiki.php/${elt.urlMediaType}/${elt.urlSafeTitle}`}
+                  >
+                    {maybeAddType(elt)}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )
+        ) : null}
+
         <button style={{ margin: "5px 0px", width: "fit-content" }}>
           Get shared tropes!
         </button>
