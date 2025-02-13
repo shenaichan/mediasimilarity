@@ -56,7 +56,7 @@ function App() {
       const tid = setTimeout(() => {
         console.log("finally stopped typing");
         search(currInput.trim());
-      }, 1000);
+      }, 300);
       setTimeoutId(tid);
     }
   }, [currInput]);

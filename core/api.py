@@ -4,6 +4,7 @@ from ninja import NinjaAPI, Schema
 
 api = NinjaAPI()
 
+# TODO: SEND TIMESTAMPS FOR OUT OF ORDER DATA
 class MediaSchema(Schema):
     urlSafeTitle: str
     urlMediaType: str

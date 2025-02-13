@@ -16,11 +16,11 @@ currTz = pytz.timezone('America/Los_Angeles')
 class Command(BaseCommand):
 
     def add_arguments(self, parser):
-        parser.add_argument('startingTrope', type=int)
+        parser.add_argument('startingMedia', type=int)
 
     def handle(self, *args, **options):   
 
-        startingTrope = options['startingTrope']  
+        startingMedia = options['startingMedia']  
 
         lastTime = [time.time() - 100]
 
@@ -158,50 +158,21 @@ class Command(BaseCommand):
             return
             
 
+        # tropes = Trope.objects.all()[startingMedia - 1:]
+        # for trope in tropes:
+        #     startTime = time.time()
+        #     bfs(trope)
+        #     endTime = time.time()
+        #     elapsedTime = endTime - startTime
+        #     currTime = datetime.now(currTz).strftime('%m-%d %H:%M:%S')
+        #     print(colored(f"[{currTime}] Grabbed trope #{trope.id} {trope.displayName} in {elapsedTime:.4f} seconds", "red"))
 
-
-            
-            # should, given a trope's main page
-            # search all its subpages and get the media connected to each of those
-            # i think it should put the media into the database as it goes
-            # some stopping conditions are like
-            # if there's a piece of media in the header, then it's just a trope page
-            # specifically for that piece of media
-            # also if the trope page doesn't have any more subpages, i.e.
-            # links of the form /pmwiki/pmwiki.php/{tropeName}/{foo}
-            # yeah, so then we stop and return out
-            # once we do that, we go onto the next like... page in our queue
-            # also remember to push pages to explore to the queue, don't want to go all the way in
-            # we're done when the queue is empty
-            # so on each page we're looking for trope subpages (these are our "children")
-            # and for media links (this is our "node content")
-            # so maybe we just want a function that's like grab but it returns like
-            # two lists: a list of subpages (children), and a list of media pages (content)
-
-        # Media.objects.all().delete()
-        # narm = Trope.objects.get(urlSafeName="Narm")
-        # print(narm)
-        # insert(narm, "music", "stuff", "stuff")
-        # music = Media.objects.get(urlSafeTitle="stuff")
-        # print([trope for trope in music.tropes.all()] )
-        tropes = Trope.objects.all()[startingTrope - 1:]
-        for trope in tropes:
-            startTime = time.time()
-            bfs(trope)
-            endTime = time.time()
-            elapsedTime = endTime - startTime
-            currTime = datetime.now(currTz).strftime('%m-%d %H:%M:%S')
-            print(colored(f"[{currTime}] Grabbed trope #{trope.id} {trope.displayName} in {elapsedTime:.4f} seconds", "red"))
-'''
-go to tvtropes
-go through all 61 of these
-https://tvtropes.org/pmwiki/pagelist_having_pagetype_in_namespace.php?n=Main&t=trope&page=1
-grab each link
-go into page, first try to open all folders --> don't have to bc the text is already loaded onto the page lol
-get each HTML <a> element and check if the link doesn't involve /Main/ (i.e. it's a media)
-also check if links involve the link itself, then it's a subpage, and repeat the process here
-get the URL, check if it's in the DB already, and if not, add to the DB
-once you've made a list of all media, go to each page and get the actual name
-'''        
-           
+        for i in range(100):
+            currTime = time.time()
+            # if i % 5 == 0:
+            #     time.sleep(0.5)
+            maybeWait()
+            print("heyyy")
+            print(time.time() - currTime)
+   
                 
