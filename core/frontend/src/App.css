@@ -1,17 +1,74 @@
-#maincontent {
-  max-width: 500px;
-  margin: 0px auto;
-  display: flex;
-  height: 100vh;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid black;
+body {
+  background-color: var(--main-bg-color);
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-#searchstuff {
-  padding: 15px;
+#all {
+  display: grid;
+  grid-template-columns: 1fr minmax(300px, 1200px) 1fr;
+  grid-template-rows: max-content 1fr;
+}
+
+#infocontainer {
+  margin: 20px;
+  grid-column: 2;
+  grid-row: 1;
+  display: grid;
+  grid-template-columns: 1fr minmax(300px, 450px) 1fr;
+}
+
+#info {
+  grid-column: 2;
+}
+
+#titlecontainer {
+  margin-bottom: 60px;
+}
+
+#title {
+  font-size: x-large;
+  font-weight: normal;
+}
+
+#divider {
+  border-style: solid;
+  border-color: black;
+  border-width: 1.5px 0px 0px 0px;
+}
+
+#controls {
   display: flex;
-  flex-direction: column;
-  border: 1px solid black;
+  flex-flow: column;
   align-items: center;
+  margin-bottom: 60px;
+}
+
+.mediainput {
+  width: 100%;
+}
+
+#submit {
+  margin: 10px 0px;
+  width: max-content;
+}
+
+#tropescontainer {
+  margin: 20px;
+  grid-column: 2;
+}
+
+#tropestitle {
+  font-weight: normal;
+  font-style: italic;
+  font-size: xx-large;
+}
+
+#tropes {
+  column-width: 250px;
+  column-gap: 10px;
+  break-inside: avoid;
+}
+
+:root {
+  --main-bg-color: #f9f9f9;
 }

@@ -30,7 +30,7 @@ class Command(BaseCommand):
 
         to_delete_ids = []
 
-        medias = Media.objects.filter(id__gte=43558).order_by('id')
+        medias = Media.objects.filter(id__gte=47464).order_by('id')
         try:
             for media in medias:
                 print(media.id)
