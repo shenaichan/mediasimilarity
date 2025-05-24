@@ -40,10 +40,11 @@ body {
   display: flex;
   flex-flow: column;
   align-items: center;
-  margin-bottom: 60px;
+  margin-bottom: 40px;
 }
 
 .mediainput {
+  margin-top: 10px;
   width: 100%;
   background-color: white;
   color: black;
@@ -85,7 +86,7 @@ body {
 }
 
 #submit {
-  margin: 10px 0px;
+  margin-top: 10px;
   width: max-content;
 }
 

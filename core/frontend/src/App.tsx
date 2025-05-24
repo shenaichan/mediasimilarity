@@ -163,6 +163,7 @@ function App() {
           </div>
           <div id="controls">
             <Input media={media1} setMedia={setMedia1} />
+            <Input media={media2} setMedia={setMedia2} />
             <button
               id="submit"
               disabled={!(media1 && media2) || loading || tropes.length > 0}
@@ -170,7 +171,6 @@ function App() {
             >
               {loading ? "loading..." : "get shared tropes"}
             </button>
-            <Input media={media2} setMedia={setMedia2} />
           </div>
         </div>
       </div>

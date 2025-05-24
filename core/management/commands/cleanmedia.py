@@ -52,7 +52,7 @@ class Command(BaseCommand):
                     # 403 is access denied because i spammed too hard!
                     elif response.status_code == 403:
                         print("i got rate limited...")
-                        while response.status_code != 200:
+                        while response.status_code == 403:
                             print("waiting...")
                             time.sleep(60)
                             response = requests.get(url)
