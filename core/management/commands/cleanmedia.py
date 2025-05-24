@@ -15,8 +15,13 @@ currTz = pytz.timezone('America/Los_Angeles')
 base = "https://tvtropes.org/pmwiki/pmwiki.php/"
 
 class Command(BaseCommand):
+
+    def add_arguments(self, parser):
+        parser.add_argument('startingMedia', type=int)
     
     def handle(self, *args, **options):  
+
+        startingMedia = options['startingMedia']  
 
         lastTime = [time.time() - 100]
 
@@ -30,7 +35,7 @@ class Command(BaseCommand):
 
         to_delete_ids = []
 
-        medias = Media.objects.filter(id__gte=47464).order_by('id')
+        medias = Media.objects.filter(id__gte=startingMedia).order_by('id')
         try:
             for media in medias:
                 print(media.id)
