@@ -117,7 +117,19 @@ function Input({
   };
 
   return (
-    <>
+    <div className="inputcontainer">
+      {searching === "decided" && (
+        <p
+          onClick={() => {
+            setSearching("empty");
+            setCurrInput("");
+            setMedia(null);
+          }}
+          className="clearinput"
+        >
+          ×
+        </p>
+      )}
       <input
         className="mediainput"
         placeholder="enter media to compare"
@@ -128,7 +140,7 @@ function Input({
         disabled={searching === "decided"}
       />
       {asdf()}
-    </>
+    </div>
   );
 }
 
@@ -168,7 +180,7 @@ function App() {
             <Input media={media2} setMedia={setMedia2} />
             <button
               id="submit"
-              disabled={!(media1 && media2) || loading !== "precompare"}
+              disabled={!(media1 && media2) || loading === "comparing"}
               onClick={() => fetchTropes()}
             >
               {loading === "comparing" ? "loading..." : "get shared tropes"}

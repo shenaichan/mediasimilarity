@@ -22,7 +22,7 @@ body {
 }
 
 #titlecontainer {
-  margin-bottom: 60px;
+  margin-bottom: 50px;
 }
 
 #title {
@@ -41,6 +41,21 @@ body {
   flex-flow: column;
   align-items: center;
   margin-bottom: 40px;
+}
+
+.inputcontainer {
+  width: 100%;
+  position: relative;
+}
+
+.clearinput {
+  position: absolute;
+  top: 0.5em;
+  right: 6px;
+}
+
+.clearinput:hover {
+  cursor: pointer;
 }
 
 .mediainput {
