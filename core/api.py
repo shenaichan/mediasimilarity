@@ -30,10 +30,10 @@ def search(request, q: str):
 
 @api.get("/compare", response=list[TropeSchema])
 def search(request, title1: str, type1: str, title2: str, type2: str):
-    med1 = Media.objects.filter(urlSafeTitle__iexact=title1, 
-                                urlMediaType__iexact=type1).first()
-    med2 = Media.objects.filter(urlSafeTitle__iexact=title2, 
-                                urlMediaType__iexact=type2).first()
+    med1 = Media.objects.get(urlSafeTitle__iexact=title1, 
+                                urlMediaType__iexact=type1)
+    med2 = Media.objects.get(urlSafeTitle__iexact=title2, 
+                                urlMediaType__iexact=type2)
     print(med1.displayTitle)
     print(med2.displayTitle)
     tropes1 = med1.tropes.all()

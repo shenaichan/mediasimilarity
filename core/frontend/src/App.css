@@ -114,6 +114,11 @@ body {
   break-inside: avoid;
 }
 
+#tropes p {
+  line-height: 1;
+  margin-bottom: 0.5em;
+}
+
 :root {
   --main-bg-color: #f9f9f9;
   --emph-color: #e3e3e3;

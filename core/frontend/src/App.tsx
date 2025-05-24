@@ -176,10 +176,10 @@ function App() {
           </div>
         </div>
       </div>
-      {tropes.length && media1 && media2 ? (
+      {loading === "compared" && media1 && media2 ? (
         <div id="tropescontainer">
           <p id="tropestitle">
-            tropes shared between{" "}
+            {tropes.length === 0 ? "no " : ""}tropes shared between{" "}
             <a
               href={constructMediaUrl(media1)}
               target="_blank"
@@ -195,7 +195,7 @@ function App() {
             >
               {media2.displayTitle}
             </a>
-            :
+            {tropes.length === 0 ? " :(" : ":"}
           </p>
           <div id="tropes">
             {tropes.map((elt) => (

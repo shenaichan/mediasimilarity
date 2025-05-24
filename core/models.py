@@ -13,10 +13,12 @@ mediaCategories = [
     ("ComicBook", "Comic book"),
     ("ComicStrip", "Comic strip"),
     ("Fanfic", "Fanfic"), # added
+    ("Franchise", "Franchise"), # added after resolving redirects
     ("Film", "Film"),
     ("LetsPlay", "Let's play"), # added
     ("Literature", "Literature"),
     ("Magazine", "Magazine"),
+    ("Main", "Main"), # added after resolving redirects
     ("Manga", "Manga"),
     ("Manhua", "Manhua"),
     ("Manhwa", "Manhwa"),
