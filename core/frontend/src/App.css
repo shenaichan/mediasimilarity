@@ -44,13 +44,17 @@ body {
 }
 
 .mediainput {
-  margin-top: 10px;
+  margin-top: 5px;
   width: 100%;
   background-color: white;
   color: black;
   opacity: 1;
   border: 1px solid #ccc;
   border-radius: 4px;
+}
+
+.mediainput::placeholder {
+  font-style: italic;
 }
 
 .mediainput:disabled {

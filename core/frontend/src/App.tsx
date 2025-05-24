@@ -132,25 +132,27 @@ function Input({
   );
 }
 
+type CompareState = "precompare" | "comparing" | "compared";
+
 function App() {
   const [media1, setMedia1] = useState<Media | null>(null);
   const [media2, setMedia2] = useState<Media | null>(null);
 
   const [tropes, setTropes] = useState<Trope[]>([]);
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<CompareState>("precompare");
 
   const fetchTropes = async () => {
     if (!media1 || !media2) {
       console.error("what");
       return;
     }
-    setLoading(true);
+    setLoading("comparing");
     const url = `/api/compare?title1=${media1.urlSafeTitle}&type1=${media1.urlMediaType}&title2=${media2.urlSafeTitle}&type2=${media2.urlMediaType}`;
     const response = await fetch(url);
     const json: Trope[] = await response.json();
     setTropes(json);
-    setLoading(false);
+    setLoading("compared");
   };
 
   return (
@@ -166,10 +168,10 @@ function App() {
             <Input media={media2} setMedia={setMedia2} />
             <button
               id="submit"
-              disabled={!(media1 && media2) || loading || tropes.length > 0}
+              disabled={!(media1 && media2) || loading !== "precompare"}
               onClick={() => fetchTropes()}
             >
-              {loading ? "loading..." : "get shared tropes"}
+              {loading === "comparing" ? "loading..." : "get shared tropes"}
             </button>
           </div>
         </div>
