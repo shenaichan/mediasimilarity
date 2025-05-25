@@ -146,11 +146,21 @@ function Input({
 
 type CompareState = "precompare" | "comparing" | "compared";
 
+type Results = {
+  media1: Media | null;
+  media2: Media | null;
+  tropes: Trope[];
+};
+
 function App() {
   const [media1, setMedia1] = useState<Media | null>(null);
   const [media2, setMedia2] = useState<Media | null>(null);
 
-  const [tropes, setTropes] = useState<Trope[]>([]);
+  const [results, setResults] = useState<Results>({
+    media1: null,
+    media2: null,
+    tropes: [],
+  });
 
   const [loading, setLoading] = useState<CompareState>("precompare");
 
@@ -163,7 +173,7 @@ function App() {
     const url = `/api/compare?title1=${media1.urlSafeTitle}&type1=${media1.urlMediaType}&title2=${media2.urlSafeTitle}&type2=${media2.urlMediaType}`;
     const response = await fetch(url);
     const json: Trope[] = await response.json();
-    setTropes(json);
+    setResults({ media1, media2, tropes: json });
     setLoading("compared");
   };
 
@@ -188,29 +198,29 @@ function App() {
           </div>
         </div>
       </div>
-      {loading === "compared" && media1 && media2 ? (
+      {loading === "compared" && results.media1 && results.media2 ? (
         <div id="tropescontainer">
           <p id="tropestitle">
-            {tropes.length === 0 ? "no " : ""}tropes shared between{" "}
+            {results.tropes.length === 0 ? "no " : ""}tropes shared between{" "}
             <a
-              href={constructMediaUrl(media1)}
+              href={constructMediaUrl(results.media1)}
               target="_blank"
               rel="noopener noreferrer"
             >
-              {media1.displayTitle}
+              {results.media1.displayTitle}
             </a>{" "}
             &{" "}
             <a
-              href={constructMediaUrl(media2)}
+              href={constructMediaUrl(results.media2)}
               target="_blank"
               rel="noopener noreferrer"
             >
-              {media2.displayTitle}
+              {results.media2.displayTitle}
             </a>
-            {tropes.length === 0 ? " :(" : ":"}
+            {results.tropes.length === 0 ? " :(" : ":"}
           </p>
           <div id="tropes">
-            {tropes.map((elt) => (
+            {results.tropes.map((elt) => (
               <p key={`${elt.urlSafeName}`}>
                 <a
                   href={constructTropeUrl(elt)}

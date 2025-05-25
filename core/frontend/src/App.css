@@ -88,6 +88,7 @@ body {
   border-style: solid;
   max-height: 300px;
   overflow-y: scroll;
+  border-radius: 4px;
 }
 
 .mediaoptions ul {
@@ -96,12 +97,17 @@ body {
 }
 
 .mediaoptions li {
-  padding-left: 5px;
   cursor: pointer;
+  line-height: 1;
+  padding: 0.25em 5px;
 }
 
 .mediaoptions li:hover {
   background-color: var(--emph-color);
+}
+
+.mediaoptions p {
+  padding: 0px 5px;
 }
 
 #submit {
