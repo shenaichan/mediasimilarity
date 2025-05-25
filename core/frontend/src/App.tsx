@@ -202,8 +202,8 @@ function App() {
           </div>
           {showAbout && (
             <p id="infotext">
-              TVennTropes is a site for discovering shared tropes across media,
-              with data pulled from{" "}
+              T<em>Venn</em>Tropes is a site for discovering shared tropes
+              across media, with data pulled from{" "}
               <a
                 href="https://tvtropes.org/"
                 target="_blank"

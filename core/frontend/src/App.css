@@ -145,7 +145,8 @@ body {
   margin-top: 10px;
   width: max-content;
   border: 1px solid var(--text);
-  border-radius: 1em;
+  border-radius: calc(1em + 1px);
+  padding: 0.25em 10px;
 }
 
 #submit:hover {
