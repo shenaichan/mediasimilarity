@@ -1,6 +1,6 @@
 body {
   background-color: var(--main-bg-color);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Inter", Arial, Helvetica, sans-serif;
 }
 
 #all {
@@ -25,15 +25,38 @@ body {
   margin-bottom: 50px;
 }
 
+#titleflex {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+}
+
 #title {
   font-size: x-large;
   font-weight: normal;
 }
 
+#about {
+  padding-bottom: 0.1em;
+}
+
+.bolded {
+  font-weight: bold;
+}
+
+#about:hover {
+  cursor: pointer;
+  font-weight: bold;
+}
+
 #divider {
   border-style: solid;
-  border-color: black;
+  border-color: var(--text);
   border-width: 1.5px 0px 0px 0px;
+}
+
+#infotext {
+  margin-bottom: 40px;
 }
 
 #controls {
@@ -50,7 +73,7 @@ body {
 
 .clearinput {
   position: absolute;
-  top: 0.5em;
+  top: 0.3em;
   right: 6px;
 }
 
@@ -62,10 +85,14 @@ body {
   margin-top: 5px;
   width: 100%;
   background-color: white;
-  color: black;
+  color: var(--text);
   opacity: 1;
   border: 1px solid #ccc;
   border-radius: 4px;
+  padding: 0px 20px 0px 5px;
+  overflow-x: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .mediainput::placeholder {
@@ -75,7 +102,7 @@ body {
 .mediainput:disabled {
   font-style: italic;
   background-color: white;
-  color: black;
+  color: var(--text);
   opacity: 1;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -115,6 +142,10 @@ body {
   width: max-content;
 }
 
+#submit:hover {
+  cursor: pointer;
+}
+
 #tropescontainer {
   margin: 20px;
   margin-bottom: 80px;
@@ -141,6 +172,8 @@ body {
 }
 
 :root {
-  --main-bg-color: #f9f9f9;
+  --main-bg-color: #f4f4ff;
   --emph-color: #e3e3e3;
+  --text: #151551;
+  color: var(--text);
 }

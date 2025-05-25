@@ -53,13 +53,13 @@ function Input({
     if (currInput.trim()) {
       setSearching("searching");
       const tid = setTimeout(() => {
-        console.log("finally stopped typing");
+        // console.log("finally stopped typing");
 
         const search = async (query: string) => {
           const url = `/api/search?q=${query}`;
           const response = await fetch(url);
           const json: Media[] = await response.json();
-          console.log(json);
+          // console.log(json);
           if (!ignore) {
             setMediaOptions(json);
             setSearching("deciding");
@@ -164,6 +164,8 @@ function App() {
 
   const [loading, setLoading] = useState<CompareState>("precompare");
 
+  const [showAbout, setShowAbout] = useState(false);
+
   const fetchTropes = async () => {
     if (!media1 || !media2) {
       console.error("what");
@@ -182,9 +184,32 @@ function App() {
       <div id="infocontainer">
         <div id="info">
           <div id="titlecontainer">
-            <h1 id="title">TVennTropes</h1>
+            <div id="titleflex">
+              <h1 id="title">TVennTropes</h1>
+              <p
+                id="about"
+                onClick={() => setShowAbout(!showAbout)}
+                className={showAbout ? "bolded" : ""}
+              >
+                about
+              </p>
+            </div>
             <hr id="divider" />
           </div>
+          {showAbout && (
+            <p id="infotext">
+              TVennTropes is a site for discovering shared tropes across media,
+              with data pulled from{" "}
+              <a
+                href="https://tvtropes.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                tvtropes.org
+              </a>
+              . Tropes are listed from rarest to most common, column-first.
+            </p>
+          )}
           <div id="controls">
             <Input media={media1} setMedia={setMedia1} />
             <Input media={media2} setMedia={setMedia2} />
