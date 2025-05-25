@@ -3,6 +3,8 @@ import "./App.css";
 
 import mediaCategories from "./MediaCategories";
 
+import classNames from "classnames";
+
 type Media = {
   urlSafeTitle: string;
   urlMediaType: string;
@@ -123,7 +125,7 @@ function Input({
   return (
     <div className="inputcontainer">
       {searching === "decided" && (
-        <p
+        <button
           onClick={() => {
             setSearching("empty");
             setCurrInput("");
@@ -132,10 +134,12 @@ function Input({
           className="clearinput"
         >
           ×
-        </p>
+        </button>
       )}
       <input
-        className="mediainput"
+        className={classNames("mediainput", {
+          flatbottom: searching === "deciding" || searching === "searching",
+        })}
         placeholder="enter media to compare"
         onChange={(e) => {
           setCurrInput(e.target.value);
@@ -190,13 +194,13 @@ function App() {
           <div id="titlecontainer">
             <div id="titleflex">
               <h1 id="title">TVennTropes</h1>
-              <p
+              <button
                 id="about"
                 onClick={() => setShowAbout(!showAbout)}
-                className={showAbout ? "bolded" : ""}
+                className={classNames({ bolded: showAbout })}
               >
                 about
-              </p>
+              </button>
             </div>
             <hr id="divider" />
           </div>
@@ -209,7 +213,7 @@ function App() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                tvtropes.org
+                TVTropes
               </a>
               . Rarest tropes are listed first.
             </p>
