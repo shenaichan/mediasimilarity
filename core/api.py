@@ -16,7 +16,7 @@ class TropeSchema(Schema):
 @api.get("/search", response=list[MediaSchema])
 def search(request, q: str):
     medias = Media.objects.filter(displayTitle__icontains=q).annotate(tropeCount=Count('tropes')).order_by('-tropeCount')
-    print([(med.urlSafeTitle, med.urlMediaType, med.displayTitle, med.tropes.count()) for med in medias])
+    # print([(med.urlSafeTitle, med.urlMediaType, med.displayTitle, med.tropes.count()) for med in medias])
     # print([trope.id for trope in medias[0].tropes.all()])
     # print([trope.medias.all() for trope in medias[1].tropes.all()])
 
@@ -34,8 +34,8 @@ def search(request, title1: str, type1: str, title2: str, type2: str):
                                 urlMediaType__iexact=type1)
     med2 = Media.objects.get(urlSafeTitle__iexact=title2, 
                                 urlMediaType__iexact=type2)
-    print(med1.displayTitle)
-    print(med2.displayTitle)
+    # print(med1.displayTitle)
+    # print(med2.displayTitle)
     tropes1 = med1.tropes.all()
     tropes2 = med2.tropes.all()
     overlap = []
@@ -44,4 +44,4 @@ def search(request, title1: str, type1: str, title2: str, type2: str):
             overlap.append((trope, trope.medias.count()))
     overlap.sort(key=lambda x: x[1])
     return list(map(lambda x: x[0], overlap))
-    print(overlap)
+    # print(overlap)

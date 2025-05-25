@@ -84,10 +84,10 @@ body {
 .mediainput {
   margin-top: 5px;
   width: 100%;
-  background-color: white;
+  background-color: var(--white);
   color: var(--text);
   opacity: 1;
-  border: 1px solid #ccc;
+  border: 1px solid var(--text);
   border-radius: 4px;
   padding: 0px 20px 0px 5px;
   overflow-x: hidden;
@@ -101,16 +101,16 @@ body {
 
 .mediainput:disabled {
   font-style: italic;
-  background-color: white;
+  background-color: var(--white);
   color: var(--text);
   opacity: 1;
-  border: 1px solid #ccc;
+  border: 1px solid var(--text);
   border-radius: 4px;
 }
 
 .mediaoptions {
   width: 100%;
-  background-color: white;
+  background-color: var(--white);
   border-width: 0px 1px 1px 1px;
   border-style: solid;
   max-height: 300px;
@@ -138,12 +138,21 @@ body {
 }
 
 #submit {
+  color: var(--text);
+  background-color: var(--emph-color);
   margin-top: 10px;
   width: max-content;
+  border: 1px solid var(--text);
+  border-radius: 1em;
 }
 
 #submit:hover {
   cursor: pointer;
+}
+
+#submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 #tropescontainer {
@@ -162,7 +171,7 @@ body {
 
 #tropes {
   column-width: 200px;
-  column-gap: 10px;
+  column-rule: 2px solid var(--emph-color);
   break-inside: avoid;
 }
 
@@ -171,9 +180,14 @@ body {
   margin-bottom: 0.5em;
 }
 
+#tropes a {
+  text-decoration: underline 1px;
+}
+
 :root {
   --main-bg-color: #f4f4ff;
-  --emph-color: #e3e3e3;
+  --emph-color: #ffccff;
   --text: #151551;
+  --white: white;
   color: var(--text);
 }

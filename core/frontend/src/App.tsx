@@ -207,7 +207,7 @@ function App() {
               >
                 tvtropes.org
               </a>
-              . Tropes are listed from rarest to most common, column-first.
+              . Rarest tropes are listed first.
             </p>
           )}
           <div id="controls">
@@ -226,7 +226,8 @@ function App() {
       {loading === "compared" && results.media1 && results.media2 ? (
         <div id="tropescontainer">
           <p id="tropestitle">
-            {results.tropes.length === 0 ? "no " : ""}tropes shared between{" "}
+            {results.tropes.length === 0 ? "no" : results.tropes.length} trope
+            {results.tropes.length === 1 ? "" : "s"} shared between{" "}
             <a
               href={constructMediaUrl(results.media1)}
               target="_blank"
