@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 
+import mediaCategories from "./MediaCategories";
+
 type Media = {
   urlSafeTitle: string;
   urlMediaType: string;
@@ -39,7 +41,9 @@ function Input({
       mediaOptions.filter((item) => item.displayTitle === elt.displayTitle)
         .length > 1;
     if (addMedia) {
-      return `${elt.displayTitle} (${elt.urlMediaType})`;
+      return `${elt.displayTitle} (${
+        mediaCategories.find(([type, _]) => type === elt.urlMediaType)![1]
+      })`;
     } else {
       return elt.displayTitle;
     }

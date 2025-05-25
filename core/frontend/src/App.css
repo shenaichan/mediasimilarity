@@ -127,10 +127,12 @@ body {
   cursor: pointer;
   line-height: 1;
   padding: 0.25em 5px;
+  transition: background-color 0.1s ease;
 }
 
 .mediaoptions li:hover {
   background-color: var(--emph-color);
+  transition: background-color 0.1s ease;
 }
 
 .mediaoptions p {
@@ -182,6 +184,15 @@ body {
 
 #tropes a {
   text-decoration: underline 1px;
+}
+
+a {
+  transition: background-color 0.1s ease;
+}
+
+a:hover {
+  background-color: var(--emph-color);
+  transition: background-color 0.1s ease;
 }
 
 :root {
