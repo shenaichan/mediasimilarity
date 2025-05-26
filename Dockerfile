@@ -1,5 +1,8 @@
 FROM nikolaik/python-nodejs:python3.12-nodejs22
 
+RUN apt update
+RUN apt install magic-wormhole
+
 WORKDIR /code
 
 # docker will not re-pip install if requirements.txt doesn't change
