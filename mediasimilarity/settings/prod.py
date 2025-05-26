@@ -2,6 +2,8 @@ import re
 
 from .base import *
 
+DEBUG = True
+
 DJANGO_VITE = {
     "default": {
         "dev_mode": False,
