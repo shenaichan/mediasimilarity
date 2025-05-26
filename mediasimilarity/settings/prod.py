@@ -2,7 +2,7 @@ import re
 
 from .base import *
 
-DEBUG = True
+# DEBUG = True
 
 DJANGO_VITE = {
     "default": {
