@@ -205,18 +205,38 @@ function App() {
             <hr id="divider" />
           </div>
           {showAbout && (
-            <p id="infotext">
-              T<em>Venn</em>Tropes is a site for discovering shared tropes
-              across media, with data pulled from{" "}
-              <a
-                href="https://tvtropes.org/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                TVTropes
-              </a>
-              . Rarest tropes are listed first.
-            </p>
+            <div id="infotext">
+              <p>
+                T<em>Venn</em>Tropes is a site for discovering shared tropes
+                across media, with data pulled from{" "}
+                <a
+                  href="https://tvtropes.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  TVTropes
+                </a>
+                . Rarest tropes are listed first.
+              </p>
+              <p>
+                <a
+                  href="https://github.com/shenaichan/mediasimilarity"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Coded
+                </a>{" "}
+                with {"<3"} by{" "}
+                <a
+                  href="https://github.com/shenaichan/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Shenai Chan
+                </a>
+                .
+              </p>
+            </div>
           )}
           <div id="controls">
             <Input media={media1} setMedia={setMedia1} />

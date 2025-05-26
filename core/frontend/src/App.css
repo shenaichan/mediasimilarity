@@ -63,6 +63,10 @@ body {
   margin-bottom: 40px;
 }
 
+#infotext p {
+  margin-bottom: 1em;
+}
+
 #controls {
   display: flex;
   flex-flow: column;
