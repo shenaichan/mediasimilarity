@@ -1,7 +1,7 @@
 FROM nikolaik/python-nodejs:python3.12-nodejs22
 
-RUN apt update
-RUN apt install magic-wormhole
+RUN apt update -y
+RUN apt install magic-wormhole -y
 
 WORKDIR /code
 
