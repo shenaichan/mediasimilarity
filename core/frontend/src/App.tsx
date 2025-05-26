@@ -172,7 +172,7 @@ function App() {
 
   const [loading, setLoading] = useState<CompareState>("precompare");
 
-  const [showAbout, setShowAbout] = useState(false);
+  const [showAbout, _] = useState(true);
 
   const fetchTropes = async () => {
     if (!media1 || !media2) {
@@ -194,13 +194,13 @@ function App() {
           <div id="titlecontainer">
             <div id="titleflex">
               <h1 id="title">TVennTropes</h1>
-              <button
+              {/* <button
                 id="about"
                 onClick={() => setShowAbout(!showAbout)}
                 className={classNames({ bolded: showAbout })}
               >
                 about
-              </button>
+              </button> */}
             </div>
             <hr id="divider" />
           </div>
